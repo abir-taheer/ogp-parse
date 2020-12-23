@@ -1,12 +1,11 @@
-import OpenGraph, {
-  AudioProperties,
-  DeterminerValues,
-  ImageProperties,
-  isDeterminer,
-} from './opengraph';
 import getMetaTags from './getMetaTags';
+import DeterminerValues, { isDeterminer } from './types/DeterminerValues';
+import ImageProperties from './types/ImageProperties';
+import AudioProperties from './types/AudioProperties';
+import OpenGraph from './types/OpenGraph';
+import { parse } from 'node-html-parser';
 
-export default async function parse(html: string): Promise<OpenGraph> {
+export default async function parseHtml(html: string): Promise<OpenGraph> {
   let title: string | null = null;
   let type: string | null = null;
   let url: string | null = null;
@@ -19,7 +18,8 @@ export default async function parse(html: string): Promise<OpenGraph> {
   let video: ImageProperties[] = [];
   let audio: AudioProperties[] = [];
 
-  const tags = getMetaTags(html);
+  const rootElement = parse(html);
+  const tags = getMetaTags(rootElement);
 
   for (let i = 0; i < tags.length; i++) {
     const { name, content } = tags[i];
@@ -217,12 +217,12 @@ export default async function parse(html: string): Promise<OpenGraph> {
         continue;
       }
 
-      if(name === "og:audio:secure_url"){
+      if (name === 'og:audio:secure_url') {
         currentAudio.secure_url = content;
         continue;
       }
 
-      if(name === "og:audio:type"){
+      if (name === 'og:audio:type') {
         currentAudio.type = content;
       }
     }

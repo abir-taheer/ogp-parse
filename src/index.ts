@@ -1,13 +1,5 @@
-import axios from 'axios';
-import OpenGraph from './opengraph';
-import parse from './parse';
+import parseFromUrl from './parseFromUrl';
+import parseHtml from './parseHtml';
 
-export const parseHtml = parse;
-
-export default async function getOpenGraph(url: string): Promise<OpenGraph> {
-  const { data } = await axios.get(url, {
-    headers: { 'user-agent': 'googlebot' },
-  });
-
-  return parse(data);
-}
+export const parse = parseHtml;
+export default parseFromUrl;

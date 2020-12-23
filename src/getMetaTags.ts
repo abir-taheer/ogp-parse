@@ -1,14 +1,8 @@
-import { parse as parseHtml } from 'node-html-parser';
+import MetaTag from './types/MetaTag';
+import { HTMLElement } from 'node-html-parser';
 
-export type MetaTag = {
-  name: string;
-  content: string;
-};
-
-export default function getMetaTags(html: string): MetaTag[] {
+export default function getMetaTags(root: HTMLElement): MetaTag[] {
   const tags: MetaTag[] = [];
-
-  const root = parseHtml(html);
 
   const metaTagElements = root.querySelectorAll('meta');
 
